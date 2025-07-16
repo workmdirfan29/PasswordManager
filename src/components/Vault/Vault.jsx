@@ -1,23 +1,32 @@
-// Vault.js
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { enableEntry } from '../../redux/slice/passwordSlice'
+import { enableEntry } from '../../redux/slice/passwordSlice'  // Make sure this path is correct
 import CryptoJS from 'crypto-js'
 import { Eye, EyeOff } from 'lucide-react'
 
 const Vault = ({ masterPassword }) => {
   const dispatch = useDispatch()
   const { activeData, disabledData } = useSelector(state => state.passwords)
-
   const [showPasswords, setShowPasswords] = useState(false)
 
   const decryptPassword = (ciphertext) => {
-    try {
-      const bytes = CryptoJS.AES.decrypt(ciphertext, masterPassword)
-      return bytes.toString(CryptoJS.enc.Utf8)
-    } catch {
+    if (!masterPassword) {
+      console.error("No master password provided!")
       return ''
     }
+
+    try {
+      const bytes = CryptoJS.AES.decrypt(ciphertext, masterPassword)
+      const decrypted = bytes.toString(CryptoJS.enc.Utf8)
+      return decrypted || '❌ Decryption failed'
+    } catch (error) {
+      console.error('Decryption error:', error)
+      return ''
+    }
+  }
+
+  const handleTogglePasswords = () => {
+    setShowPasswords(prev => !prev)
   }
 
   const handleEnable = (id) => {
@@ -29,7 +38,7 @@ const Vault = ({ masterPassword }) => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">🔐 Full Vault</h1>
         <button
-          onClick={() => setShowPasswords(prev => !prev)}
+          onClick={handleTogglePasswords}
           className="flex items-center text-amber-600 hover:text-amber-800 text-sm font-medium"
         >
           {showPasswords ? <EyeOff size={18} className="mr-1" /> : <Eye size={18} className="mr-1" />}

@@ -1,6 +1,7 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import App from '../App';
+import Service from '../components/Service/Service'
 import Vault from '../components/Vault/Vault';
 import Manager from '../components/Manager/Manager';
 
@@ -12,9 +13,11 @@ const Routes = () => {
     element: <App />,
     children: [
       { index: true, element: <Manager/>},
-      { path: 'about', element: <div>about</div>},
       {
         path: "vault-pass", element: <Vault />
+      },
+      {
+        path: "service", element: <Service />
       }
       
     ]
