@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { enableEntry } from '../../redux/slice/passwordSlice'  // Make sure this path is correct
+import { enableEntry } from '../../redux/slice/passwordSlice'  // Ensure correct path
 import CryptoJS from 'crypto-js'
 import { Eye, EyeOff } from 'lucide-react'
 
@@ -25,16 +25,19 @@ const Vault = ({ masterPassword }) => {
     }
   }
 
+  // Toggle password visibility
   const handleTogglePasswords = () => {
     setShowPasswords(prev => !prev)
   }
 
+  // Enable a disabled entry
   const handleEnable = (id) => {
     dispatch(enableEntry(id))
   }
 
   return (
     <div className="min-h-screen bg-white px-6 py-12">
+      {/* Header with password toggle button */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">🔐 Full Vault</h1>
         <button
@@ -46,7 +49,7 @@ const Vault = ({ masterPassword }) => {
         </button>
       </div>
 
-      {/* Active Entries */}
+      {/* Active Entries Section */}
       <div className="mb-10">
         <h2 className="text-xl font-semibold text-gray-700 mb-3">🟢 Active Passwords</h2>
         <div className="overflow-auto bg-white shadow border rounded-lg">
@@ -64,7 +67,11 @@ const Vault = ({ masterPassword }) => {
                   <td className="px-6 py-4">{entry.website}</td>
                   <td className="px-6 py-4">{entry.username}</td>
                   <td className="px-6 py-4">
-                    {showPasswords ? decryptPassword(entry.password) : '********'}
+                    {showPasswords ? (
+                      <>{decryptPassword(entry.password)}</>
+                    ) : (
+                      '********'
+                    )}
                   </td>
                 </tr>
               ))}
@@ -78,7 +85,7 @@ const Vault = ({ masterPassword }) => {
         </div>
       </div>
 
-      {/* Disabled Entries */}
+      {/* Disabled Entries Section */}
       <div>
         <h2 className="text-xl font-semibold text-gray-700 mb-3">🔴 Disabled Passwords</h2>
         <div className="overflow-auto bg-white shadow border rounded-lg">
@@ -97,7 +104,13 @@ const Vault = ({ masterPassword }) => {
                   <td className="px-6 py-4">{entry.website}</td>
                   <td className="px-6 py-4">{entry.username}</td>
                   <td className="px-6 py-4">
-                    {showPasswords ? decryptPassword(entry.password) : '********'}
+                    {showPasswords ? (
+                      // If passwords are to be shown, decrypt and show the password
+                      <>{decryptPassword(entry.password)}</>
+                    ) : (
+                      // Otherwise, show the masked password (********)
+                      '********'
+                    )}
                   </td>
                   <td className="px-6 py-4">
                     <button
